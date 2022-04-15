@@ -1,9 +1,9 @@
 from typing import Tuple
-from Static import colors
+from classes.colors import colors
 
 
 class Labrynth:
-    def __init__(self, newLabrynth=list[list]):
+    def __init__(self, newLabrynth:list[list]):
         self.labrynth   = newLabrynth
         self.rows       = len(newLabrynth)
         self.columns    = len(newLabrynth[0])

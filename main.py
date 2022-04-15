@@ -1,4 +1,4 @@
-from Labrynth import Labrynth
+from classes.Labrynth import Labrynth
 from maze1 import lab
 
 if __name__ == '__main__':
