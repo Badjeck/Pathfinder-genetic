@@ -1,5 +1,5 @@
 from classes.Labrynth import Labrynth
-from maze1 import lab
+from mazes.maze_1 import lab
 
 if __name__ == '__main__':
     l = Labrynth(lab)
