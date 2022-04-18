@@ -1,14 +1,26 @@
+from ast import Param
 from typing import Tuple
-from classes.colors import colors
+from classes.Parameters import Parameters
+from classes.colors import renderEnd, renderPath, renderStart, renderWall
+from classes.mr_larbin import mr_larbin
 
 
 class Labrynth:
-    def __init__(self, newLabrynth:list[list]):
+    def __init__(self, newLabrynth:list[list], agent:mr_larbin=None):
         self.labrynth   = newLabrynth
         self.rows       = len(newLabrynth)
         self.columns    = len(newLabrynth[0])
         self.start      = self.searchInLab(case='e')
         self.end        = self.searchInLab(case='s')
+        self.isValid    = False
+
+        if agent:
+            self.agent  = agent
+        else:
+            self.agent = mr_larbin(newPosition=self.start)
+
+        if self.labrynth and self.start and self.end and self.agent:
+            self.isValid = True
 
     def searchInLab(self, case:str=None, place:Tuple=None):
         if case:
@@ -17,17 +29,37 @@ class Labrynth:
                 j = 0
                 while j < self.columns:
                     if self.labrynth[i][j] == case:
-                        return (i, j)
+                        return {
+                            'field': case,
+                            'position': (i, j)
+                        }
                     j += 1
                 i += 1
-            return (-1, -1)
+            return {
+                'field': None,
+                'position': (-1, -1)
+            }
         elif place:
             if place[0] > self.rows or place[0] < 0:
-                print('given x out of range')
+                return {
+                    'field': None,
+                    'position': (-1, -1)
+                }
             elif place[1] > self.columns or place[1] < 0:
-                print('given y out of range')
+                return {
+                    'field': None,
+                    'position': (-1, -1)
+                }
             else:
-                return self.labrynth[place[0]][place[1]]
+                return {
+                    'field': self.labrynth[place[0]][place[1]],
+                    'position': (place[0], place[1])
+                }
+        else:
+            return {
+                'field': None,
+                'position': (-1, -1)
+            }
 
     def getStart(self):
         if self.start:
@@ -35,7 +67,7 @@ class Labrynth:
         else:
             self.start = self.searchInLab('e')
             return self.start
-    
+
     def getEnd(self):
         if self.end:
             return self.end
@@ -43,24 +75,57 @@ class Labrynth:
             self.end = self.searchInLab('e')
             return self.end
 
-    def show(self):
+    def moveAgent(self, direction: str, showMaze: bool=True):
+        if direction in Parameters.directions.keys():
+            match direction:
+                case 'left':
+                    newPos = self.searchInLab(place=(self.agent.getPosition().get('position')[0], self.agent.getPosition().get('position')[1]-1))
+                case 'up':
+                    newPos = self.searchInLab(place=(self.agent.getPosition().get('position')[0]-1, self.agent.getPosition().get('position')[1]))
+                case 'right':
+                    newPos = self.searchInLab(place=(self.agent.getPosition().get('position')[0], self.agent.getPosition().get('position')[1]+1))
+                case 'down':
+                    newPos = self.searchInLab(place=(self.agent.getPosition().get('position')[0]+1, self.agent.getPosition().get('position')[1]))
+
+            if newPos.get('field') == 'p' or newPos.get('field') == 'e':
+                self.agent.moveTo(newPos=newPos, direction=direction)
+            elif newPos.get('field') == 'w':
+                self.agent.moveTo(direction=direction)
+            elif newPos.get('field') == 's':
+                self.agent.moveTo(newPos=newPos, direction=direction)
+                print('END ! letz goo')
+
+            self.agent.updateFitness(self.end.get('position'))
+            if showMaze:
+                self.showMaze(agent=True)
+
+    def showMaze(self, agent:bool = None):
         i = 0
         columns = []
         while i < self.rows:
             j = 0
             row = []
             while j < self.columns:
+                isAgent = agent and self.agent.getPosition().get('position')[0] == i and self.agent.getPosition().get('position')[1] == j
+
                 match self.labrynth[i][j]:
                     case 'w':
-                        row.append(colors.wall+u"\u2588\u2588"+colors.reset)
+                        row.append(renderWall(isAgent))
                     case 'p':
-                        row.append(colors.path+u"\u2588\u2588"+colors.reset)
+                        row.append(renderPath(isAgent))
                     case 'e':
-                        row.append(colors.start+u"\u2588\u2588"+colors.reset)
+                        row.append(renderStart(isAgent))
                     case 's':
-                        row.append(colors.end+u"\u2588\u2588"+colors.reset)
+                        row.append(renderEnd(isAgent))
                 j += 1
+            columns.append(row)
             i += 1
-            columns.append(''.join(row))
 
-        print('\n'.join(columns))
+        print('\n'.join([''.join(a) for a in columns]), end='\x1b[1K\r')
+
+    def run(self, directionsList:list[str]=[]):
+        for direction in directionsList:
+            self.moveAgent(direction=direction, showMaze=False)
+
+        self.showMaze(agent=True)
+        print(str(self.agent))

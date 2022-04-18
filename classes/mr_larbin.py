@@ -1,48 +1,56 @@
-from typing import Tuple
-from classes.Parameters import Parameters
+from cmath import sqrt
+from turtle import position
 
 
 class mr_larbin:
-    def __init__(self, name:str="Mr Larbin", new_x_pos:int=None, new_y_pos:int=None) -> None:
-        self.__name=name
-        self.__x_pos=new_x_pos if new_x_pos else None
-        self.__y_pos=new_y_pos if new_y_pos else None
-        self.__moves=[]
+    def __init__(self, newPosition:dict[str, tuple[int, int]], name:str="Mr Larbin", moves:list[str]=[]) -> None:
+        self.name=name
+        self.initialPosition = newPosition
+        self.position = newPosition
+        self.moves=moves
+        self.fitness = -1
+
+    def __str__(self) -> str:
+        return "{} is on position ({}, {}) Far to arrival as {}".format(self.getName(), self.position.get('position')[0], self.position.get('position')[1], self.getFitness())
 
     def getName(self) -> str:
-        return self.__name
+        return self.name
 
     def setName(self, new_name: str) -> None:
-        self.__name = new_name
+        self.name = new_name
 
     def getName(self) -> str:
-        return self.__name
+        return self.name
 
-    def setXPos(self, newXPos: int) -> None:
-        self.x_pos = newXPos
+    def setMoves(self, newMoves: list[str]) -> None:
+        self.moves = newMoves
 
-    def getXPos(self) -> int:
-        return self.__x_pos
+    def getMoves(self) -> list:
+        return self.moves
 
-    def setYPos(self, newYPos: int) -> None:
-        self.__y_pos = newYPos
+    def addMove(self, newMove: str) -> None:
+        self.moves.append(newMove)
 
-    def getYPos(self) -> int:
-        return self.__y_pos
+    def removeMove(self, moveIndex: int) -> None:
+        del self.moves[moveIndex]
 
-    def updatePos(self, new_pos:Tuple) -> None:
-        self.setXPos(new_pos[0])
-        self.setYPos(new_pos[1])
+    def setPosition(self, newPosition: dict[str, tuple[int, int]]):
+        self.position = newPosition
 
-    def addMove(self, move: str) -> None:
-        if move in Parameters.directions.keys():
-            self.__moves.append(move)
-        else:
-            print('Wrong move given : {}'.format(move))
+    def getPosition(self) -> dict[str, tuple[int, int]]:
+        return self.position
 
-    def move(self, new_direction):
-        if new_direction in Parameters.directions.keys():
-            self.updatePos(Parameters.directions.get(new_direction))
-            self.addMove(new_direction)
-        else:
-            print('Wrong move given : {}'.format(new_direction))
+    def moveTo(self, direction: str, newPos: dict[str, tuple[int, int]]=None):
+        self.addMove(direction)
+        self.setPosition(newPos if newPos else self.getPosition())
+
+    def setFitness(self, newFitness):
+        self.fitness = newFitness
+
+    def updateFitness(self, arrival: tuple[int, int]):
+        currentPos = self.getPosition().get('position')
+        self.setFitness(sqrt((arrival[0]-currentPos[0])**2+(arrival[1]-currentPos[1])**2).real)
+        return self.fitness
+
+    def getFitness(self):
+        return self.fitness
