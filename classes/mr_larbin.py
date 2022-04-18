@@ -45,5 +45,4 @@ class mr_larbin:
             self.updatePos(Parameters.directions.get(new_direction))
             self.addMove(new_direction)
         else:
-            print('Wrong move given : {}'.format(new_direction
-            ))
+            print('Wrong move given : {}'.format(new_direction))
