@@ -4,15 +4,17 @@ from classes.Parameters import Parameters
 from classes.colors import renderEnd, renderPath, renderStart, renderWall
 from classes.mr_larbin import mr_larbin
 
-
 class Labrynth:
-    def __init__(self, newLabrynth:list[list], agent:mr_larbin=None):
+    def __init__(self, newLabrynth:list[list], min_moves:int, moves_list:list[str]=None, agent:mr_larbin=None):
         self.labrynth   = newLabrynth
         self.rows       = len(newLabrynth)
         self.columns    = len(newLabrynth[0])
+        self.min_moves  = min_moves
         self.start      = self.searchInLab(case='e')
         self.end        = self.searchInLab(case='s')
         self.isValid    = False
+
+        self.moves_list = moves_list if moves_list else self.generateMoveList()
 
         if agent:
             self.agent  = agent
@@ -75,6 +77,9 @@ class Labrynth:
             self.end = self.searchInLab('e')
             return self.end
 
+    def generateMoveList(self):
+        return [ Parameters.randomDirection() for _ in range(self.min_moves) ]
+
     def moveAgent(self, direction: str, showMaze: bool=True):
         if direction in Parameters.directions.keys():
             match direction:
@@ -123,9 +128,13 @@ class Labrynth:
 
         print('\n'.join([''.join(a) for a in columns]), end='\x1b[1K\r')
 
-    def run(self, directionsList:list[str]=[]):
-        for direction in directionsList:
-            self.moveAgent(direction=direction, showMaze=False)
+    def run(self, directionsList:list[str]=None):
+        if directionsList:
+            for direction in directionsList:
+                self.moveAgent(direction=direction, showMaze=False)
+        else:
+            for direction in self.moves_list:
+                self.moveAgent(direction=direction, showMaze=False)
 
         self.showMaze(agent=True)
         print(str(self.agent))
