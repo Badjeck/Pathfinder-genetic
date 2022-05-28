@@ -1,7 +1,8 @@
 from random import randrange
+from sys import stdout
 from classes.Labrynth import Labrynth
 from classes.Parameters import Parameters
-
+from copy import deepcopy
 
 class Population:
     def __init__(self,lab) -> None:
@@ -38,11 +39,12 @@ class Population:
         self.evaluate_order()
 
         for g in range(Parameters.nbIterations) :
-            print('  ===== GENERATION {} =====  '.format(g))
+            stdout.write('\r  ===== Generation : {} =====  '.format(g))
+            stdout.flush()
 
             newPopulation = []
             #roue biaiseé
-            newPopulation.append(self.population[0])
+            newPopulation.append(deepcopy(self.population[0]))
             #nouvelle generation
             while len(newPopulation) <= Parameters.populationNbr :
                 parent = self.selection()
@@ -53,15 +55,16 @@ class Population:
             if self.population[0].getFitness() == 0 :
                 isWin = True
                 break
-            else :
-                print("=====================================")
+            # else :
+            #     print("=====================================")
 
             generation = g
 
         if isWin :
             print("Mr larbin à trouvé la sortie à la génération : ", generation+1)
-        else :
-            print("Mr larbin n'as pas trouvé la sortie")
-            print(self.population[0].showMaze(True))
-            print(str(self.population[0]))
             print(str(self.population[0].moves_list))
+            print(self.population[0].showMaze(True))
+        else :
+            print("\nMr larbin n'as pas trouvé la sortie")
+            print(str(self.population[0]))
+            print(self.population[0].showMaze(True))

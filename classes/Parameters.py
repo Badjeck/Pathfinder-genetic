@@ -7,12 +7,12 @@ class Parameters:
         'right':    ( 1,  0),
         'down':     ( 0,  1)
     }
-    nbIterations=500
-    mutationRatio=0.7
-    populationNbr=15
+    nbIterations=1000
+    mutationRatio=0.8
+    populationNbr=20
 
     mutationDeleteRatio=0.3
-    mutationAddRation= mutationDeleteRatio + 0.3
+    mutationAddRation= mutationDeleteRatio + 0.5
     mutationDirectionRatio = 1 - mutationDeleteRatio - mutationAddRation
 
     def randomDirection():
