@@ -9,6 +9,7 @@ class Parameters:
     }
     nbIterations=10
     mutationRatio=0.5
+    populationNbr=10
 
     def randomDirection():
         rndm = randint(0, 3)
