@@ -33,6 +33,8 @@ class Population:
         return self.population[ind_index]
 
     def run(self) -> None:
+        isWin = False
+        generation = 1
         self.evaluate_order()
 
         for g in range(Parameters.nbIterations) :
@@ -49,11 +51,14 @@ class Population:
 
             self.evaluate_order()
             if self.population[0].getFitness() == 0 :
-                print("Mr larbin a trouvé la sortie")
+                isWin = True
                 break
             else :
-                # print('\n'.join([str(elem) for elem in self.population]))
-                print("========================================================================================")
+                generation += generation
+                print("=====================================")
 
-        print("Mr larbin n'as pas trouvé la sortie")
-        print(self.population[0].__str__())
+        if isWin :
+            print("Mr larbin à trouvé la sortie à la génération", generation)
+        else :
+            print("Mr larbin n'as pas trouvé la sortie")
+            print(self.population[0].__str__())
