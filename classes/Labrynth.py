@@ -50,20 +50,26 @@ class Labrynth:
                 'position': (-1, -1)
             }
         elif place:
-            if place[0] > self.rows or place[0] < 0:
+            try:
+                if place[0] > self.rows or place[0] < 0:
+                    return {
+                        'field': None,
+                        'position': (-1, -1)
+                    }
+                elif place[1] > self.columns or place[1] < 0:
+                    return {
+                        'field': None,
+                        'position': (-1, -1)
+                    }
+                else:
+                    return {
+                        'field': self.labrynth[place[0]][place[1]],
+                        'position': (place[0], place[1])
+                    }
+            except IndexError:
                 return {
                     'field': None,
                     'position': (-1, -1)
-                }
-            elif place[1] > self.columns or place[1] < 0:
-                return {
-                    'field': None,
-                    'position': (-1, -1)
-                }
-            else:
-                return {
-                    'field': self.labrynth[place[0]][place[1]],
-                    'position': (place[0], place[1])
                 }
         else:
             return {
@@ -106,7 +112,6 @@ class Labrynth:
                 self.agent.moveTo(direction=direction)
             elif newPos.get('field') == 's':
                 self.agent.moveTo(newPos=newPos, direction=direction)
-                print('END ! letz goo')
 
             self.agent.updateFitness(self.end.get('position'))
             if showMaze:

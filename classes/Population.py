@@ -35,7 +35,9 @@ class Population:
     def run(self) -> None:
         self.evaluate_order()
 
-        for _ in range(Parameters.nbIterations) :
+        for g in range(Parameters.nbIterations) :
+            print('  ===== GENERATION {} =====  '.format(g))
+
             newPopulation = []
             #roue biaiseé
             newPopulation.append(self.population[0])
@@ -50,7 +52,7 @@ class Population:
                 print("Mr larbin a trouvé la sortie")
                 break
             else :
-                print('\n'.join([str(elem) for elem in self.population]))
+                # print('\n'.join([str(elem) for elem in self.population]))
                 print("========================================================================================")
 
         print("Mr larbin n'as pas trouvé la sortie")
