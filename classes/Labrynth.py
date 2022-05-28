@@ -24,6 +24,9 @@ class Labrynth:
         if self.labrynth and self.start and self.end and self.agent:
             self.isValid = True
 
+    def __str__(self) -> str:
+        return str(self.agent)
+
     def searchInLab(self, case:str=None, place:Tuple=None):
         if case:
             i = 0

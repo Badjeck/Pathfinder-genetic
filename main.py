@@ -8,5 +8,5 @@ if __name__ == '__main__':
     print(pop.__str__())
 
 
-    l = Labrynth(lab.get('lab'), lab.get('min_moves'))
-    l.run()
+    # l = Labrynth(lab.get('lab'), lab.get('min_moves'))
+    # l.run()
