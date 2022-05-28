@@ -13,7 +13,10 @@ class Population:
         return '\n'.join([str(ind) for ind in self.population])
 
     def evaluate_order(self) -> None:
-        pass
+        for labrynth in self.population :
+            labrynth.run()
+
+        self.population.sort(key=lambda x: x.getFitness(), reverse=False)
 
     def selection(self):
         total_ranks = len(self.population)*(len(self.population)+1)/2
@@ -30,4 +33,25 @@ class Population:
         return self.population[ind_index]
 
     def run(self) -> None:
-        pass
+        self.evaluate_order()
+
+        for _ in range(Parameters.nbIterations) :
+            newPopulation = []
+            #roue biaiseé
+            newPopulation.append(self.population[0])
+            #nouvelle generation
+            while len(newPopulation) <= Parameters.populationNbr :
+                parent = self.selection()
+                newPopulation.append(Labrynth(parent.labrynth,parent.min_moves,parent.moves_list))
+            self.population = newPopulation
+
+            self.evaluate_order()
+            if self.population[0].getFitness() == 0 :
+                print("Mr larbin a trouvé la sortie")
+                break
+            else :
+                print('\n'.join([str(elem) for elem in self.population]))
+                print("========================================================================================")
+
+        print("Mr larbin n'as pas trouvé la sortie")
+        print(self.population[0].__str__())

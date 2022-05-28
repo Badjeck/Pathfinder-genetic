@@ -1,4 +1,5 @@
 from ast import Param
+from random import random, randrange
 from typing import Tuple
 from classes.Parameters import Parameters
 from classes.colors import renderEnd, renderPath, renderStart, renderWall
@@ -14,7 +15,11 @@ class Labrynth:
         self.end        = self.searchInLab(case='s')
         self.isValid    = False
 
-        self.moves_list = moves_list if moves_list else self.generateMoveList()
+        if moves_list :
+            self.moves_list = moves_list.copy()
+            self.mutate()
+        else :
+            self.moves_list = self.generateMoveList()
 
         if agent:
             self.agent  = agent
@@ -131,6 +136,25 @@ class Labrynth:
 
         print('\n'.join([''.join(a) for a in columns]), end='\x1b[1K\r')
 
+    def getFitness(self) :
+        return self.agent.getFitness()
+
+    def mutate(self) :
+        #Si on peu muter
+        if random() <= Parameters.mutationRatio :
+            event = random()
+            #On supprime un movement
+            if event <= Parameters.mutationDeleteRatio :
+                self.moves_list.pop(randrange(len(self.moves_list)))
+            #Ou on ajoute un mouvement
+            elif event > Parameters.mutationDeleteRatio or event <= Parameters.mutationAddRation :
+                self.moves_list.append(Parameters.randomDirection())
+            #Ou on change un mouvement
+            else :
+                self.moves_list[randrange(len(self.moves_list))] = Parameters.randomDirection()
+
+            
+
     def run(self, directionsList:list[str]=None):
         if directionsList:
             for direction in directionsList:
@@ -139,5 +163,3 @@ class Labrynth:
             for direction in self.moves_list:
                 self.moveAgent(direction=direction, showMaze=False)
 
-        self.showMaze(agent=True)
-        print(str(self.agent))

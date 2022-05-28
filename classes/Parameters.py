@@ -11,6 +11,10 @@ class Parameters:
     mutationRatio=0.5
     populationNbr=10
 
+    mutationDeleteRatio=0.1
+    mutationAddRation= mutationDeleteRatio + 0.2
+    mutationDirectionRatio = 1 - mutationDeleteRatio - mutationAddRation
+
     def randomDirection():
         rndm = randint(0, 3)
 
