@@ -34,3 +34,6 @@ Lors de chaque "itération", nous créons une nouvelle génération. Pour se fai
 
 Afin de lancer le projet, il est nécessaire d'installer Python avec une version supérieur ou égale à la `3.10.1`.
 Aucune installation de librairie quelconque n'est nécessaire au bon fonctionnement du projet.
+
+Il existe trois labyrinthes dans le dossier mazes, la sélection du labyrinthe se fait dans le fichier main, il suiffit de remplacer le numéro du labyrinthe par un autre numéro valide (1,2 ou 3).
+Une fois le labyrinthe choisi il suffit de lancer le fichier main avec votre commande python favorite ;).

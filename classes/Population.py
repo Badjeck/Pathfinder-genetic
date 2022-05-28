@@ -55,8 +55,6 @@ class Population:
             if self.population[0].getFitness() == 0 :
                 isWin = True
                 break
-            # else :
-            #     print("=====================================")
 
             generation = g
 
