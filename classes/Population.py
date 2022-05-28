@@ -34,7 +34,7 @@ class Population:
 
     def run(self) -> None:
         isWin = False
-        generation = 1
+        generation = 0
         self.evaluate_order()
 
         for g in range(Parameters.nbIterations) :
@@ -54,11 +54,14 @@ class Population:
                 isWin = True
                 break
             else :
-                generation += generation
                 print("=====================================")
 
+            generation = g
+
         if isWin :
-            print("Mr larbin à trouvé la sortie à la génération", generation)
+            print("Mr larbin à trouvé la sortie à la génération : ", generation+1)
         else :
             print("Mr larbin n'as pas trouvé la sortie")
-            print(self.population[0].__str__())
+            print(self.population[0].showMaze(True))
+            print(str(self.population[0]))
+            print(str(self.population[0].moves_list))
