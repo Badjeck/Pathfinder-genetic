@@ -8,11 +8,13 @@
 
 ## 1. Description du projet
 
-Le but du projet est de réaliser un programme permettant à un agent de traverser des labyrinthes en utilisant un minimum de coup possible afin d'arriver à la sortie.
+Le but du projet est de réaliser un programme permettant à un agent de trouver la sortie d'un labyrinthe.
 
-Afin de se faire, nous allons créer un agent qui pourra se déplacer dans le labyrinthe selon une liste de mouvements prédéfinis.
+Afin de se faire, nous allons créer un agent qui pourra se déplacer dans le labyrinthe selon une liste de mouvements générée aléatoirement.
 
-Cette agent fera parti d'une liste dans laquelle il sera confronté aux autres agents grâce à la distance le séparant de la sortie.
+Cet agent fera parti d'une liste dans laquelle il sera confronté aux autres agents grâce à la distance le séparant de la sortie.
+
+Cet agent aura une chance définie d'être sélectionné ou modifié pour faire parti d'une nouvelle génération afin d'essayer de trouver la sortie du même labyrinthe.
 
 ## 2. Description technique
 
@@ -22,7 +24,7 @@ Un déplacement se caractérise avec notre agent par son mouvement d'une case à
 
 Notre agent se différencie des autres et apprend par l'évolution de son génome, représenté dans notre cas par la liste des mouvements que notre agent doit effectuer afin de trouver la sortie.
 
-L'évolution du génome est aléatoire et peut donc avoir lieu ou non. Si elle a lieu, elle peut se caractériser de 3 manières différentes : Ajout d'un déplacement à la liste du génome, suppression d'un déplacement de la liste du génome, modification d'un déplacement existant.
+L'évolution du génome est aléatoire et peut donc avoir lieu ou non lors du passage d'un génération à la suivante. Si elle a lieu, elle peut se caractériser de 3 manières différentes : Ajout d'un déplacement à la liste du génome, suppression d'un déplacement de la liste du génome, modification d'un déplacement existant.
 
 Notre population est composée d'une liste d'agents, tous triés en fonction du calcul de leur taux de réussite. Ce taux, aussi appelé "fitness" est représenté par la distance absolue (ignorant les obstacles) séparant notre agent de la sortie du labyrinthe.
 
