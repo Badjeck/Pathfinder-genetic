@@ -62,6 +62,7 @@ class Population:
             print("Mr larbin à trouvé la sortie à la génération : ", generation+1)
             print(str(self.population[0].moves_list))
             print(self.population[0].showMaze(True))
+            self.population[0].showPace()
         else :
             print("\nMr larbin n'as pas trouvé la sortie")
             print(str(self.population[0]))

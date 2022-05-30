@@ -1,4 +1,5 @@
-from ast import Param
+from sys import stdout
+from time import sleep
 from random import random, randrange
 from typing import Tuple
 from classes.Parameters import Parameters
@@ -141,6 +142,30 @@ class Labrynth:
 
         print('\n'.join([''.join(a) for a in columns]), end='\x1b[1K\r')
 
+    def showCell(self, position):
+        i = 0
+        columns = []
+        while i < self.rows:
+            j = 0
+            row = []
+            while j < self.columns:
+                isAgent = position and position.get('position')[0] == i and position.get('position')[1] == j
+
+                match self.labrynth[i][j]:
+                    case 'w':
+                        row.append(renderWall(isAgent))
+                    case 'p':
+                        row.append(renderPath(isAgent))
+                    case 'e':
+                        row.append(renderStart(isAgent))
+                    case 's':
+                        row.append(renderEnd(isAgent))
+                j += 1
+            columns.append(row)
+            i += 1
+
+        return '\n'.join([''.join(a) for a in columns])+'\n'
+
     def getFitness(self) :
         return self.agent.getFitness()
 
@@ -158,7 +183,13 @@ class Labrynth:
             else :
                 self.moves_list[randrange(len(self.moves_list))] = Parameters.randomDirection()
 
-            
+    def showPace(self):
+        for idx, place in enumerate(self.agent.getPlaces()):
+            stdout.write('\r  ===== Coup : {} =====  \n'.format(idx))
+            stdout.flush()
+            stdout.write('\r{}\n'.format(self.showCell(place)))
+            stdout.flush()
+            sleep(1)
 
     def run(self, directionsList:list[str]=None):
         if directionsList:

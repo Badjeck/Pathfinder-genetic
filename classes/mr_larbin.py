@@ -8,6 +8,7 @@ class mr_larbin:
         self.initialPosition = newPosition
         self.position = newPosition
         self.moves=moves
+        self.places=[]
         self.fitness = -1
 
     def __str__(self) -> str:
@@ -18,9 +19,6 @@ class mr_larbin:
 
     def setName(self, new_name: str) -> None:
         self.name = new_name
-
-    def getName(self) -> str:
-        return self.name
 
     def setMoves(self, newMoves: list[str]) -> None:
         self.moves = newMoves
@@ -40,9 +38,21 @@ class mr_larbin:
     def getPosition(self) -> dict[str, tuple[int, int]]:
         return self.position
 
+    def getPlaces(self):
+        return self.places
+    
+    def setPlaces(self, newPlaces=[]):
+        self.places = newPlaces
+        return self
+
+    def addPlace(self, newPlace: dict[str, tuple[int, int]]):
+        self.places.append(newPlace)
+        return self
+
     def moveTo(self, direction: str, newPos: dict[str, tuple[int, int]]=None):
         self.addMove(direction)
         self.setPosition(newPos if newPos else self.getPosition())
+        self.addPlace(newPos if newPos else self.getPosition())
 
     def setFitness(self, newFitness):
         self.fitness = newFitness
