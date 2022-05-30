@@ -11,7 +11,7 @@ class Labrynth:
         self.labrynth   = newLabrynth
         self.rows       = len(newLabrynth)
         self.columns    = len(newLabrynth[0])
-        self.min_moves  = min_moves
+        self.min_moves  = min_moves if min_moves else 5
         self.start      = self.searchInLab(case='e')
         self.end        = self.searchInLab(case='s')
         self.isValid    = False
